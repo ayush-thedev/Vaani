@@ -129,12 +129,13 @@ class SarvamService:
         """
         prompt = (
             f"You are a professional multilingual news intelligence agent. "
-            f"Analyze the following news article carefully.\n\n"
+            f"Analyze the following news article carefully.\n"
+            f"IMPORTANT: Always write your ENTIRE analysis in English, even if the original article is in another language.\n\n"
             f"Title: {title or 'News Article'}\n"
             f"Content:\n{text}\n\n"
             f"Provide your analysis using EXACTLY this markdown layout:\n"
             f"### Summary\n"
-            f"(Provide a concise 5 to 7 sentence factual summary. Preserve all critical facts, dates, numbers, and names without editorial bias or hallucination.)\n\n"
+            f"(Provide a concise 5 to 7 sentence factual summary IN ENGLISH. Preserve all critical facts, dates, numbers, and names without editorial bias or hallucination.)\n\n"
             f"### Key Takeaways\n"
             f"- (Takeaway 1)\n"
             f"- (Takeaway 2)\n"
@@ -146,13 +147,13 @@ class SarvamService:
             f"- **Dates**: (Comma separated list of relevant dates, or None)\n"
             f"- **Statistics**: (Comma separated list of key figures/percentages/costs, or None)\n\n"
             f"### Detected Language\n"
-            f"(Source language name, e.g. English, Hindi, Tamil, Marathi, etc.)"
+            f"(The language of the ORIGINAL article, e.g. English, Hindi, Tamil, Marathi, etc.)"
         )
 
         response_stream = self.client.chat.completions(
             model="sarvam-105b-conversations",
             messages=[
-                {"role": "system", "content": "You are a precise, objective news summarization and entity extraction intelligence agent."},
+                {"role": "system", "content": "You are a precise, objective news summarization and entity extraction intelligence agent. You always respond in English."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.2,

@@ -182,6 +182,14 @@ export default function App() {
     if (!analysisResult) return;
     setSelectedLanguage(targetLangCode);
     setTranslationError(null);
+
+    // The summary is always generated in English by Sarvam-105B.
+    // If the user selects English, just show the original summary — no API call needed.
+    if (targetLangCode === 'en-IN') {
+      setTranslatedSummary(analysisResult.summary);
+      return;
+    }
+
     setIsTranslating(true);
 
     try {
@@ -191,7 +199,8 @@ export default function App() {
         body: JSON.stringify({
           text: analysisResult.summary,
           target_language: targetLangCode,
-          source_language: analysisResult.detected_lang_code || 'en-IN'
+          // Summary is always in English regardless of the original article's language.
+          source_language: 'en-IN'
         })
       });
 

@@ -255,3 +255,63 @@ class SarvamService:
                 raise RuntimeError(f"Translation failed: {str(e)}")
 
         return " ".join(translated_chunks)
+
+    def generate_speech(self, text: str, language_code: str = "en-IN") -> str:
+        """
+        Converts text to speech using Sarvam Bulbul v4 Flash.
+        Returns base64-encoded MP3 audio string.
+        """
+        if not text.strip():
+            raise ValueError("Text for speech synthesis cannot be empty.")
+
+        code = self.resolve_lang_code(language_code)
+        bulbul_supported = {
+            'en-IN', 'hi-IN', 'bn-IN', 'gu-IN', 'kn-IN',
+            'ml-IN', 'mr-IN', 'od-IN', 'pa-IN', 'ta-IN', 'te-IN'
+        }
+        if code not in bulbul_supported:
+            # Fallback to Hindi if Indic script, else English
+            code = "hi-IN" if code in {'mai-IN', 'kok-IN', 'doi-IN', 'sa-IN', 'ne-IN', 'brx-IN'} else "en-IN"
+
+        # Cap text at 1500 chars to fit within Bulbul single-utterance limits
+        clean_text = text.strip()
+        if len(clean_text) > 1500:
+            clean_text = clean_text[:1500]
+
+        try:
+            res = self.client.text_to_speech.convert(
+                text=clean_text,
+                language_code=code,
+                model="bulbul:v4-flash",
+                output_audio_codec="mp3"
+            )
+            if not res.audios:
+                raise RuntimeError("No audio was returned from Bulbul TTS.")
+            return res.audios[0]
+        except Exception as e:
+            logger.error(f"TTS conversion failed: {e}", exc_info=True)
+            raise RuntimeError(f"Speech synthesis error: {str(e)}")
+
+    def transcribe_audio(self, file_bytes: bytes, filename: str = "audio.webm", mime_type: str = "audio/webm") -> Dict[str, Any]:
+        """
+        Transcribes spoken audio into text using Sarvam Saaras v4 STT.
+        """
+        if not file_bytes:
+            raise ValueError("Audio data is empty.")
+
+        try:
+            res = self.client.speech_to_text.transcribe(
+                file=(filename, file_bytes, mime_type),
+                model="saaras:v4",
+                mode="transcribe",
+                language_code="unknown"
+            )
+            return {
+                "transcript": res.transcript.strip(),
+                "detected_language": res.language_code,
+                "request_id": res.request_id
+            }
+        except Exception as e:
+            logger.error(f"STT transcription failed: {e}", exc_info=True)
+            raise RuntimeError(f"Speech-to-text transcription error: {str(e)}")
+

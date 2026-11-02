@@ -22,6 +22,8 @@ import {
   ChevronDown
 } from 'lucide-react';
 import type { AnalysisData, SupportedLanguage } from './types';
+import { AudioBriefingPlayer } from './components/AudioBriefingPlayer';
+import { VoiceRecorder } from './components/VoiceRecorder';
 
 const ALL_SARVAM_LANGUAGES: SupportedLanguage[] = [
   { code: "en-IN", name: "English" },
@@ -403,13 +405,21 @@ export default function App() {
                     />
                   </div>
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                       <label className="block text-xs font-semibold uppercase tracking-wider text-stone-500">
                         Article Content
                       </label>
-                      <span className="text-xs text-stone-400">
-                        {textInput.length.toLocaleString()} / 50,000 characters
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <VoiceRecorder
+                          onTranscribed={(transcript) => {
+                            setTextInput((prev) => (prev ? prev + '\n\n' + transcript : transcript));
+                          }}
+                          disabled={isProcessing}
+                        />
+                        <span className="text-xs text-stone-400">
+                          {textInput.length.toLocaleString()} / 50,000 characters
+                        </span>
+                      </div>
                     </div>
                     <textarea
                       rows={6}
@@ -542,6 +552,14 @@ export default function App() {
                   <p className="font-serif text-base text-stone-800 leading-relaxed">
                     {analysisResult.summary}
                   </p>
+
+                  {/* Voice Audio Narration for Executive Summary */}
+                  <AudioBriefingPlayer
+                    text={analysisResult.summary}
+                    languageCode="en-IN"
+                    label="Listen to Executive Briefing"
+                    accentColor="amber"
+                  />
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
@@ -625,9 +643,19 @@ export default function App() {
                       <p className="mt-1">{translationError}</p>
                     </div>
                   ) : translatedSummary ? (
-                    <p className="text-base text-stone-800 leading-relaxed font-sans">
-                      {translatedSummary}
-                    </p>
+                    <div>
+                      <p className="text-base text-stone-800 leading-relaxed font-sans">
+                        {translatedSummary}
+                      </p>
+
+                      {/* Voice Audio Narration for Regional Translation */}
+                      <AudioBriefingPlayer
+                        text={translatedSummary}
+                        languageCode={selectedLanguage}
+                        label={`Listen in ${supportedLanguages.find((l) => l.code === selectedLanguage)?.name.split(' ')[0] || 'Indic'}`}
+                        accentColor="indigo"
+                      />
+                    </div>
                   ) : (
                     <div className="py-12 text-center text-stone-400">
                       <Languages className="w-8 h-8 mx-auto mb-2 opacity-40" />

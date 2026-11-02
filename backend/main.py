@@ -4,7 +4,7 @@ import time
 import asyncio
 import logging
 from typing import Optional
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
@@ -267,4 +267,95 @@ async def translate_content(req: TranslateRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Translation error: {str(exc)}"
+        )
+
+class SpeakRequest(BaseModel):
+    text: str = Field(..., description="Text content to convert to speech")
+    language_code: Optional[str] = Field("en-IN", description="BCP-47 language code for narration")
+
+@app.post("/api/v1/voice/speak")
+async def generate_speech(req: SpeakRequest):
+    """
+    Generates natural audio narration using Sarvam Bulbul v4 Flash.
+    Returns base64 encoded MP3 audio.
+    """
+    if not req.text.strip():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Text cannot be empty."
+        )
+
+    if not await rate_limiter.acquire():
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Rate limit reached. Please wait a moment."
+        )
+
+    if not sarvam_service:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Sarvam AI service is not initialized."
+        )
+
+    try:
+        loop = asyncio.get_event_loop()
+        audio_b64 = await loop.run_in_executor(
+            None,
+            sarvam_service.generate_speech,
+            req.text,
+            req.language_code or "en-IN"
+        )
+        return {
+            "audio_base64": audio_b64,
+            "language_code": req.language_code or "en-IN",
+            "mime_type": "audio/mp3"
+        }
+    except Exception as exc:
+        logger.error(f"TTS synthesis failed: {exc}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Speech synthesis error: {str(exc)}"
+        )
+
+@app.post("/api/v1/voice/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    """
+    Transcribes audio into text using Sarvam Saaras v4 STT.
+    """
+    if not await rate_limiter.acquire():
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Rate limit reached. Please wait a moment."
+        )
+
+    if not sarvam_service:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Sarvam AI service is not initialized."
+        )
+
+    try:
+        audio_bytes = await file.read()
+        if not audio_bytes:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Uploaded audio file is empty."
+            )
+
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(
+            None,
+            sarvam_service.transcribe_audio,
+            audio_bytes,
+            file.filename or "recording.webm",
+            file.content_type or "audio/webm"
+        )
+        return result
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error(f"STT transcription failed: {exc}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Speech transcription error: {str(exc)}"
         )

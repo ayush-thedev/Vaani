@@ -6,13 +6,14 @@ An AI-powered multilingual news intelligence platform designed to eliminate lang
 
 ---
 
-## Features (Phase 1 — MVP)
+## Features
 
-- **Dual Input Modes**: Extract content cleanly from any article URL (using Trafilatura with SSRF protections) or paste raw article text directly.
+- **Triple Input Modes**: Extract content cleanly from any article URL (using Trafilatura with SSRF protections), paste raw article text directly, or **dictate using voice** powered by Sarvam **Saaras v4** speech recognition.
 - **Sarvam-105B Reasoning**: Real-time token-by-token streaming of executive summaries (5–7 sentences), key takeaways, and detected source language.
+- **Audio News Briefing (Text-to-Speech)**: Interactive regional-language voice player powered by Sarvam **Bulbul v4 Flash** with scrubbable controls, playback speeds, and replay.
 - **Extracted Intelligence Entities**: Automatically groups People, Organizations, Locations, Relevant Dates, and Key Figures / Statistics.
-- **Instant Indic Translations**: One-click translation of the summary into **Hindi**, **Tamil**, **Marathi**, or **English** powered by `sarvam-translate:v1` with sentence-boundary chunking.
-- **Editorial UI**: Clean, responsive layout inspired by modern news intelligence dashboards with live streaming output cards and feedback collection.
+- **Instant Indic Translations (All 23 Languages)**: One-click translation of the summary into **any of the 22 Scheduled Indian Languages + English** powered by `sarvam-translate:v1` with sentence-boundary chunking.
+- **Editorial UI**: Clean, responsive layout inspired by modern news intelligence dashboards with live streaming output cards, interactive voice widgets, and feedback collection.
 
 ---
 

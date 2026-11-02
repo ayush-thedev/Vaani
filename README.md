@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌐 Vaani — Multilingual News Intelligence Agent
+# Vaani — Multilingual News Intelligence Agent
 
 <p align="center">
   <strong><em>"Every story. Every language. One perspective."</em></strong>
@@ -26,22 +26,22 @@
 
 </div>
 
-## 📑 Table of Contents
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-- [Sarvam AI Model Stack](#-sarvam-ai-model-stack)
-- [Supported Languages (23 Official Languages)](#-supported-languages-23-official-languages)
-- [Architecture & Data Pipeline](#-architecture--data-pipeline)
-- [Security & Resilience](#-security--resilience)
-- [API Reference](#-api-reference)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Roadmap](#-roadmap)
-- [License](#-license)
+## Table of Contents
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Sarvam AI Model Stack](#sarvam-ai-model-stack)
+- [Supported Languages (23 Official Languages)](#supported-languages-23-official-languages)
+- [Architecture & Data Pipeline](#architecture--data-pipeline)
+- [Security & Resilience](#security--resilience)
+- [API Reference](#api-reference)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Roadmap](#roadmap)
+- [License](#license)
 
 ---
 
-## 🔍 Overview
+## Overview
 
 News consumption in multilingual societies faces three major bottlenecks:
 1. **Language Barriers**: Local reporting in regional scripts remains inaccessible to readers from other states.
@@ -52,44 +52,44 @@ News consumption in multilingual societies faces three major bottlenecks:
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-### 1. 📥 Triple Input System
+### 1. Triple Input System
 * **URL Extraction**: Ingest articles directly from web URLs with automated boilerplate, ad, and navigation removal using `trafilatura`.
 * **Pasted Content**: Clean paste interface with real-time character counters and truncation safeguards (up to 50,000 characters).
 * **Voice Dictation (Speech-to-Text)**: Live in-browser microphone recording with one-click transcription powered by **Saaras v4** (`saaras:v4`).
 
-### 2. ⚡ Real-Time Streaming Intelligence Briefings
+### 2. Real-Time Streaming Intelligence Briefings
 * Powered by **Sarvam-105B Conversations** (`sarvam-105b-conversations`).
 * Token-by-token **Server-Sent Events (SSE)** streaming: see words materialize as reasoning executes.
 * Standardized 5–7 sentence factual executive summaries without hallucinations or speculative bias.
 
-### 3. 🏷️ Automated Entity Classification
+### 3. Automated Entity Classification
 * Deep extraction and categorisation of critical entities:
-  * 👤 **People**: Key political leaders, executives, scientists, and officials.
-  * 🏢 **Organizations**: Agencies, startups, ministries, and companies.
-  * 📍 **Locations**: Cities, space centres, states, and geographic points of interest.
-  * 📅 **Dates**: Temporal points of milestone achievements or event deadlines.
-  * 📊 **Statistics**: Financial figures, cost estimates, percentages, and metrics.
+  * **People**: Key political leaders, executives, scientists, and officials.
+  * **Organizations**: Agencies, startups, ministries, and companies.
+  * **Locations**: Cities, space centres, states, and geographic points of interest.
+  * **Dates**: Temporal points of milestone achievements or event deadlines.
+  * **Statistics**: Financial figures, cost estimates, percentages, and metrics.
 
-### 4. 🇮🇳 Full Indic Translation (All 23 Languages)
+### 4. Full Indic Translation (All 23 Languages)
 * Integrated with **Sarvam Translate** (`sarvam-translate:v1`) in formal register mode.
 * Intelligent **sentence-boundary chunking** (< 1,800 characters) to respect API quotas without breaking linguistic context.
 * Features quick-pick pills for top languages plus a native script dropdown covering all 22 Scheduled Indian Languages + English.
 
-### 5. 🎙️ Natural Audio Briefings (Text-to-Speech)
+### 5. Natural Audio Briefings (Text-to-Speech)
 * Integrated voice player powered by **Bulbul v4 Flash** (`bulbul:v4-flash`).
 * Listen to the briefing in English or in the selected Indic regional translation.
 * Complete custom playback UI: Play / Pause, scrubber timeline, elapsed/total time readout, and restart.
 
-### 6. 🎨 Editorial-Grade Dashboard
+### 6. Editorial-Grade Dashboard
 * Aesthetic interface built with **React 19**, **TypeScript**, and **Tailwind CSS**.
 * Typography optimized for editorial legibility using *Newsreader* (Serif) and *Plus Jakarta Sans*.
 * Built-in thumbs up/down user satisfaction tracking.
 
 ---
 
-## 🤖 Sarvam AI Model Stack
+## Sarvam AI Model Stack
 
 | Modality | Model | Version Identifier | Role in Vaani |
 |---|---|---|---|
@@ -100,7 +100,7 @@ News consumption in multilingual societies faces three major bottlenecks:
 
 ---
 
-## 🗺️ Supported Languages (23 Official Languages)
+## Supported Languages (23 Official Languages)
 
 Vaani supports full bidirectional translation and processing across all 22 official Eighth Schedule languages of India plus English:
 
@@ -121,7 +121,7 @@ Vaani supports full bidirectional translation and processing across all 22 offic
 
 ---
 
-## 🏛️ Architecture & Data Pipeline
+## Architecture & Data Pipeline
 
 ```mermaid
 flowchart TD
@@ -150,7 +150,7 @@ flowchart TD
 
 ---
 
-## 🛡️ Security & Resilience
+## Security & Resilience
 
 - **SSRF Immunity**: Custom network security resolution validates every submitted URL before fetching, strictly blocking private address ranges (`127.0.0.0/8`, `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `169.254.0.0/16`, `::1`, `fc00::/7`).
 - **Token Bucket Rate Limiting**: In-memory rate limiter configured to 60 requests/minute to match Sarvam API quotas and prevent abuse.
@@ -159,7 +159,7 @@ flowchart TD
 
 ---
 
-## 📡 API Reference
+## API Reference
 
 Interactive OpenAPI documentation is available at `http://127.0.0.1:8000/docs`.
 
@@ -220,7 +220,7 @@ GET /api/v1/languages
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 Vaani/
@@ -252,7 +252,7 @@ Vaani/
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 - **Python**: 3.10+ (tested on Python 3.12)
@@ -295,7 +295,7 @@ Vaani/
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] **Phase 1 (MVP)**: URL/Text processing, Sarvam-105B streaming summarization, entity extraction.
 - [x] **23-Language Support**: Expansion to all 22 official scheduled Indian languages + English via `sarvam-translate:v1`.
@@ -307,10 +307,10 @@ Vaani/
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
 <div align="center">
-  <sub>Built with ❤️ using Sarvam AI Indic Models.</sub>
+  <sub>Built with Sarvam AI Indic Models.</sub>
 </div>

@@ -9,27 +9,60 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# Supported language codes and names for Phase 1
+# Supported language codes and names (all 23 languages supported by Sarvam AI)
 SUPPORTED_LANGUAGES = [
     {"code": "en-IN", "name": "English"},
     {"code": "hi-IN", "name": "Hindi (हिंदी)"},
+    {"code": "bn-IN", "name": "Bengali (বাংলা)"},
     {"code": "mr-IN", "name": "Marathi (मराठी)"},
+    {"code": "te-IN", "name": "Telugu (తెలుగు)"},
     {"code": "ta-IN", "name": "Tamil (தமிழ்)"},
+    {"code": "gu-IN", "name": "Gujarati (ગુજરાતી)"},
+    {"code": "ur-IN", "name": "Urdu (اردو)"},
+    {"code": "kn-IN", "name": "Kannada (ಕನ್ನಡ)"},
+    {"code": "od-IN", "name": "Odia (ଓଡ଼ିଆ)"},
+    {"code": "ml-IN", "name": "Malayalam (മലയാളം)"},
+    {"code": "pa-IN", "name": "Punjabi (ਪੰਜਾਬੀ)"},
+    {"code": "as-IN", "name": "Assamese (অসমীয়া)"},
+    {"code": "mai-IN", "name": "Maithili (मैथिली)"},
+    {"code": "sat-IN", "name": "Santali (ᱥᱟᱱᱛᱟᱲᱤ)"},
+    {"code": "ks-IN", "name": "Kashmiri (کٲشُر)"},
+    {"code": "ne-IN", "name": "Nepali (नेपाली)"},
+    {"code": "kok-IN", "name": "Konkani (कोंकणी)"},
+    {"code": "sd-IN", "name": "Sindhi (سنڌي)"},
+    {"code": "doi-IN", "name": "Dogri (डोगरी)"},
+    {"code": "mni-IN", "name": "Manipuri (মৈতৈলোন্)"},
+    {"code": "brx-IN", "name": "Bodo (बड़ो)"},
+    {"code": "sa-IN", "name": "Sanskrit (संस्कृतम्)"},
 ]
 
 # Language name to Sarvam BCP-47 mapping
 LANG_NAME_TO_CODE = {
     "english": "en-IN",
     "hindi": "hi-IN",
-    "marathi": "mr-IN",
-    "tamil": "ta-IN",
-    "telugu": "te-IN",
     "bengali": "bn-IN",
-    "kannada": "kn-IN",
-    "malayalam": "ml-IN",
+    "marathi": "mr-IN",
+    "telugu": "te-IN",
+    "tamil": "ta-IN",
     "gujarati": "gu-IN",
-    "punjabi": "pa-IN",
+    "urdu": "ur-IN",
+    "kannada": "kn-IN",
     "odia": "od-IN",
+    "oriya": "od-IN",
+    "malayalam": "ml-IN",
+    "punjabi": "pa-IN",
+    "assamese": "as-IN",
+    "maithili": "mai-IN",
+    "santali": "sat-IN",
+    "kashmiri": "ks-IN",
+    "nepali": "ne-IN",
+    "konkani": "kok-IN",
+    "sindhi": "sd-IN",
+    "dogri": "doi-IN",
+    "manipuri": "mni-IN",
+    "meitei": "mni-IN",
+    "bodo": "brx-IN",
+    "sanskrit": "sa-IN",
 }
 
 TRANSLATE_CHUNK_SIZE = 1800

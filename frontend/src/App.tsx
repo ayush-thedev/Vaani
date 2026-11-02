@@ -18,9 +18,38 @@ import {
   ThumbsUp,
   ThumbsDown,
   Loader2,
-  ChevronRight
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 import type { AnalysisData, SupportedLanguage } from './types';
+
+const ALL_SARVAM_LANGUAGES: SupportedLanguage[] = [
+  { code: "en-IN", name: "English" },
+  { code: "hi-IN", name: "Hindi (हिंदी)" },
+  { code: "bn-IN", name: "Bengali (বাংলা)" },
+  { code: "mr-IN", name: "Marathi (मराठी)" },
+  { code: "te-IN", name: "Telugu (తెలుగు)" },
+  { code: "ta-IN", name: "Tamil (தமிழ்)" },
+  { code: "gu-IN", name: "Gujarati (ગુજરાતી)" },
+  { code: "ur-IN", name: "Urdu (اردو)" },
+  { code: "kn-IN", name: "Kannada (ಕನ್ನಡ)" },
+  { code: "od-IN", name: "Odia (ଓଡ଼ିଆ)" },
+  { code: "ml-IN", name: "Malayalam (മലയാളം)" },
+  { code: "pa-IN", name: "Punjabi (ਪੰਜਾਬੀ)" },
+  { code: "as-IN", name: "Assamese (অসমীয়া)" },
+  { code: "mai-IN", name: "Maithili (मैथिली)" },
+  { code: "sat-IN", name: "Santali (ᱥᱟᱱᱛᱟᱲᱤ)" },
+  { code: "ks-IN", name: "Kashmiri (کٲشُر)" },
+  { code: "ne-IN", name: "Nepali (नेपाली)" },
+  { code: "kok-IN", name: "Konkani (कोंकणी)" },
+  { code: "sd-IN", name: "Sindhi (سنڌي)" },
+  { code: "doi-IN", name: "Dogri (डोगरी)" },
+  { code: "mni-IN", name: "Manipuri (মৈতৈলোন্)" },
+  { code: "brx-IN", name: "Bodo (बड़ो)" },
+  { code: "sa-IN", name: "Sanskrit (संस्कृतम्)" },
+];
+
+const POPULAR_LANG_CODES = ['en-IN', 'hi-IN', 'mr-IN', 'ta-IN', 'te-IN', 'bn-IN'];
 
 const SAMPLE_STORY_TEXT = `The Indian Space Research Organisation (ISRO) successfully launched the Earth Observation Satellite EOS-08 on August 16, 2024, from the Satish Dhawan Space Centre in Sriharikota aboard the Small Satellite Launch Vehicle (SSLV-D3). 
 
@@ -41,12 +70,7 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   // Translation State
-  const [supportedLanguages, setSupportedLanguages] = useState<SupportedLanguage[]>([
-    { code: 'en-IN', name: 'English' },
-    { code: 'hi-IN', name: 'Hindi (हिंदी)' },
-    { code: 'mr-IN', name: 'Marathi (मराठी)' },
-    { code: 'ta-IN', name: 'Tamil (தமிழ்)' },
-  ]);
+  const [supportedLanguages, setSupportedLanguages] = useState<SupportedLanguage[]>(ALL_SARVAM_LANGUAGES);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('hi-IN');
   const [translatedSummary, setTranslatedSummary] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -543,23 +567,47 @@ export default function App() {
                       </h2>
                     </div>
                     
-                    {/* Language Selector Pills */}
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {supportedLanguages.map((lang) => (
-                        <button
-                          key={lang.code}
-                          type="button"
-                          onClick={() => handleTranslate(lang.code)}
+                    {/* Language Selector Controls */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {/* Popular Quick-Select Pills */}
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {supportedLanguages
+                          .filter((lang) => POPULAR_LANG_CODES.includes(lang.code))
+                          .map((lang) => (
+                            <button
+                              key={lang.code}
+                              type="button"
+                              onClick={() => handleTranslate(lang.code)}
+                              disabled={isTranslating}
+                              className={`text-xs px-2.5 py-1 rounded-md transition-all font-medium ${
+                                selectedLanguage === lang.code && translatedSummary
+                                  ? 'bg-indigo-600 text-white shadow-2xs'
+                                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200/80 hover:text-stone-900'
+                              }`}
+                            >
+                              {lang.name.split(' ')[0]}
+                            </button>
+                          ))}
+                      </div>
+
+                      {/* Dropdown for All 23 Supported Languages */}
+                      <div className="relative inline-flex items-center">
+                        <select
+                          value={selectedLanguage}
+                          onChange={(e) => handleTranslate(e.target.value)}
                           disabled={isTranslating}
-                          className={`text-xs px-2.5 py-1 rounded-md transition-all font-medium ${
-                            selectedLanguage === lang.code && translatedSummary
-                              ? 'bg-indigo-600 text-white shadow-2xs'
-                              : 'bg-stone-100 text-stone-600 hover:bg-stone-200/80 hover:text-stone-900'
-                          }`}
+                          className="appearance-none text-xs pl-2.5 pr-7 py-1 rounded-md bg-stone-100 hover:bg-stone-200/80 text-stone-700 font-medium border border-stone-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer transition-colors"
+                          title="Select from all 23 Sarvam AI supported languages"
                         >
-                          {lang.name.split(' ')[0]}
-                        </button>
-                      ))}
+                          <option value="" disabled>All 23 Languages...</option>
+                          {supportedLanguages.map((lang) => (
+                            <option key={lang.code} value={lang.code}>
+                              {lang.name}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="w-3.5 h-3.5 text-stone-500 absolute right-2 pointer-events-none" />
+                      </div>
                     </div>
                   </div>
 
@@ -583,14 +631,16 @@ export default function App() {
                   ) : (
                     <div className="py-12 text-center text-stone-400">
                       <Languages className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                      <p className="text-xs">Click a language pill above to generate instant Indic translation.</p>
+                      <p className="text-xs">Click a language pill or pick from the 23 languages dropdown above.</p>
                     </div>
                   )}
                 </div>
 
                 {translatedSummary && (
                   <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                    <span>Model: sarvam-translate:v1 (formal)</span>
+                    <span>
+                      Model: sarvam-translate:v1 • {supportedLanguages.find((l) => l.code === selectedLanguage)?.name || selectedLanguage}
+                    </span>
                     <button
                       onClick={() => handleCopy(translatedSummary)}
                       className="hover:text-stone-800 flex items-center gap-1"

@@ -84,15 +84,14 @@ The minimum required to validate the core value proposition.
 | **Pasted text input** | Paste raw article text directly |
 | **Auto language detection** | Via `sarvam-translate:v1`'s `auto` source detection — no separate detection step |
 | **AI summarization** | Standard summary (5–7 sentences) + key takeaways + entity extraction, generated in a single Sarvam-105B call |
-| **Translation** | Into 4 languages: English, Hindi, Tamil, Marathi. User selects target language after viewing the summary |
-| **Single-page UI** | Input area → processing indicator → results panel. Responsive layout |
+| **Translation** | Into all 23 Sarvam AI supported languages (English + 22 Scheduled Indian languages) |
+| **Single-page UI** | Input area → processing indicator → results panel with quick pills and 23-language selector. Responsive layout |
 
 **Explicitly excluded from Phase 1:**
 - PDF upload, image/screenshot input
 - Summary length toggles (Quick Brief / Detailed)
 - Audio narration
 - Authentication, user accounts, article history
-- More than 4 target languages
 
 ### Phase 2 — Full Summarization + Audio
 
@@ -153,7 +152,7 @@ The system generates a summary, key takeaways, and entity extraction in a **sing
 
 ### FR-03: Translation (Phase 1)
 
-**MVP languages:** English, Hindi, Tamil, Marathi.
+**Supported languages:** All 23 languages supported by Sarvam AI (`sarvam-translate:v1`): English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Urdu, Kannada, Odia, Malayalam, Punjabi, Assamese, Maithili, Santali, Kashmiri, Nepali, Konkani, Sindhi, Dogri, Manipuri, Bodo, and Sanskrit.
 
 **Requirements:**
 - Use `sarvam-translate:v1` (formal mode) as the primary translation model.
